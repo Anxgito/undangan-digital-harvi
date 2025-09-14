@@ -13,378 +13,66 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
     
-    <!-- Page Flip Library -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/page-flip/dist/css/page-flip.css">
-    
     <style>
-        body { font-family: 'Montserrat', sans-serif; background-color: #e0e0e0; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
-        .font-great-vibes { font-family: 'Great Vibes', cursive; }
-        #book-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
-        #book { box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .page { background-color: #FDF8F0; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1.5rem; box-sizing: border-box; border: 1px solid #e0c8a0; }
-        .page-cover { background-color: #004d40; color: white; }
-        .page .page-number { position: absolute; bottom: 15px; font-size: 0.75rem; color: #999; }
-        .page-cover-back { background-color: #004d40; }
-        .cover-bg { background-image: url('./images/cover.jpg'); background-size: cover; background-position: center; position: relative; }
-        .cover-bg > .content { position: relative; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        .cover-bg::before { content: ''; position: absolute; inset: 0; background-color: rgba(0,0,0,0.5); z-index: 1; }
-        body.overflow-hidden { overflow: hidden; }
-        #opener-overlay { transition: opacity 0.75s ease-in-out; }
-        #music-toggle.playing { animation: spin 8s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 1000; background-color: rgba(0, 0, 0, 0.5); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        #prev-btn { left: 10px; }
-        #next-btn { right: 10px; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-image: url('./versi-buku/images/cover.jpg'); /* Mengambil gambar dari folder versi buku */
+            background-size: cover;
+            background-position: center;
+        }
+        .font-great-vibes {
+            font-family: 'Great Vibes', cursive;
+        }
+        .glass-card {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
     </style>
 </head>
-<body class="overflow-hidden">
+<body class="flex items-center justify-center min-h-screen p-4">
 
-    <!-- ===== Halaman Pembuka untuk Musik ===== -->
-    <div id="opener-overlay" class="fixed inset-0 bg-stone-800 bg-opacity-95 z-[9999] flex flex-col items-center justify-center text-center p-6 text-white">
+    <div class="w-full max-w-lg text-center text-white rounded-2xl shadow-2xl p-8 md:p-12 glass-card">
         <h2 class="text-2xl md:text-3xl tracking-wider">Undangan Tasyakuran Khitan</h2>
         <h1 class="font-great-vibes text-6xl md:text-8xl my-4">Harvi Tegar Seftian</h1>
-        <p class="mt-8 mb-2">Kepada Yth. Bapak/Ibu/Saudara/i</p>
-        <p class="font-bold text-lg" id="guest-name-opener">Tamu Undangan</p>
-        <button id="open-invitation" class="mt-12 inline-flex items-center gap-2 bg-teal-700 hover:bg-teal-800 text-white font-bold py-3 px-8 rounded-full transition-transform transform hover:scale-105 shadow-lg">
-            <i data-lucide="mail-open"></i>
-            Buka Undangan
-        </button>
-    </div>
+        
+        <p class="mt-8 mb-6">Silakan pilih versi undangan yang ingin Anda lihat:</p>
 
-    <!-- ===== Kontrol Musik ===== -->
-    <button id="music-toggle" class="hidden fixed bottom-5 right-5 z-[2000] bg-white text-teal-800 rounded-full p-3 shadow-lg playing">
-        <i id="music-icon" data-lucide="pause-circle"></i>
-    </button>
-    
-    <!-- Audio Player -->
-    <audio id="background-music" loop>
-        <source src="./music/sholawat.mp3" type="audio/mpeg">
-    </audio>
+        <div class="flex flex-col md:flex-row gap-4 justify-center">
+            <!-- Tombol Versi Gulir -->
+            <a id="link-gulir" href="./versi-gulir/" class="group flex-1 inline-flex items-center justify-center gap-2 bg-teal-700 hover:bg-teal-600 font-bold py-3 px-6 rounded-full transition-all shadow-lg transform hover:scale-105">
+                <i data-lucide="smartphone" class="w-5 h-5 transition-transform group-hover:rotate-[-10deg]"></i>
+                <span>Versi Klasik (Gulir)</span>
+            </a>
 
-    <!-- Kontainer Buku -->
-    <div id="book-container" class="hidden w-full h-full">
-        <div id="book">
-            <!-- Halaman 1: Cover Depan -->
-            <div class="page page-cover cover-bg" data-density="hard">
-                <div class="content text-center text-white">
-                    <h2 class="text-2xl md:text-3xl tracking-wider">Walimatul Khitan</h2>
-                    <h1 class="font-great-vibes text-6xl my-4">Harvi Tegar Seftian</h1>
-                    <p id="guest-name" class="font-bold text-lg mt-8">Tamu Undangan</p>
-                </div>
-            </div>
-
-            <!-- Halaman 2: Bismillah -->
-            <div class="page">
-                <div class="text-center w-full">
-                    <h2 class="font-great-vibes text-5xl text-teal-800 mb-4">Bismillahirohmanirohim</h2>
-                    <p class="text-stone-600 mb-12">Assalamu'alaikum Warahmatullahi Wabarakatuh. <br> Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud menyelenggarakan acara Tasyakuran Walimatul Khitan putra kami:</p>
-                    <h3 class="font-great-vibes text-6xl text-teal-900">Harvi Tegar Seftian</h3>
-                    <p class="text-stone-500 mt-2 text-lg">Putra dari Bapak KUNEDI & Ibu TINAH</p>
-                </div>
-                <div class="page-number">2</div>
-            </div>
-
-            <!-- Halaman 3: Detail Acara -->
-            <div class="page">
-                <div class="w-full text-center">
-                    <div class="w-48 h-48 mx-auto rounded-full shadow-xl overflow-hidden mb-6">
-                        <img src="./images/harvi.jpg" alt="Harvi" class="w-full h-full object-cover">
-                    </div>
-                    <div class="space-y-4 text-left mx-auto max-w-xs">
-                        <h3 class="text-xl font-bold text-teal-800 text-center border-b-2 border-teal-200 pb-2">Insya Allah:</h3>
-                        <div class="flex items-start space-x-3"><i data-lucide="calendar-days" class="w-6 h-6 text-teal-700 mt-1"></i><div><h4 class="font-bold">Hari & Tanggal</h4><p class="text-stone-600">Senin, 22 September 2025</p></div></div>
-                        <div class="flex items-start space-x-3"><i data-lucide="clock" class="w-6 h-6 text-teal-700 mt-1"></i><div><h4 class="font-bold">Waktu</h4><p class="text-stone-600">08:00 WIB s/d Selesai</p></div></div>
-                        <div class="flex items-start space-x-3"><i data-lucide="map-pin" class="w-6 h-6 text-teal-700 mt-1"></i><div><h4 class="font-bold">Lokasi</h4><p class="text-stone-600 text-sm">Kp. Kebon Kelapa RT 005/003, Desa Mekarsari, Panimbang</p></div></div>
-                    </div>
-                </div>
-                <div class="page-number">3</div>
-            </div>
-            
-            <!-- Halaman 4: Pemangku Hajat -->
-            <div class="page">
-                <div class="w-full h-full flex flex-col justify-center">
-                    <h3 class="text-2xl font-bold text-teal-800 text-center border-b pb-2 mb-4">Pemangku Hajat:</h3>
-                    <ul class="space-y-3 text-stone-600 text-center text-sm">
-                        <li>Bpk. Supinah (Alm) - Orang Tua</li>
-                        <li>Ibu Dasiti - Orang Tua</li>
-                        <li>Bpk. Farid Sungkar - Kakak</li>
-                        <li>Ibu Ira Arnesih - Kakak</li>
-                        <li>~Gito~ (Sebagai)</li>
-                    </ul>
-                </div>
-                 <div class="page-number">4</div>
-            </div>
-            
-            <!-- Halaman 5: Turut Mengundang -->
-            <div class="page">
-                 <div class="w-full h-full flex flex-col">
-                    <h3 class="text-2xl font-bold text-teal-800 text-center border-b pb-2 mb-4">Turut Mengundang:</h3>
-                    <div class="columns-2 gap-x-6 text-xs text-stone-600">
-                        <p class="mb-2"><strong>Bpk. Junaedi</strong><br>(Kepala Desa Mekarsari)</p>
-                        <p class="mb-2"><strong>Bpk. Nanung</strong><br>(Sekdes Mekarsari)</p>
-                        <p class="mb-2"><strong>Bpk. RT Caryudi</strong><br>(RT Kp Kbn Kelapa)</p>
-                        <p class="mb-2"><strong>Bpk. H. Dakman</strong><br>(Tokoh Masyarakat)</p>
-                        <p class="mb-2"><strong>Bpk. Dasuki</strong><br>(Paman-Kp banteng)</p>
-                        <p class="mb-2"><strong>Bpk. Kosim</strong><br>(Paman-Kp banteng)</p>
-                        <p class="mb-2"><strong>Bpk. Supardi/Gojil</strong><br>(Paman-Kp banteng)</p>
-                        <p class="mb-2"><strong>Bpk. Ahmadi/Mamad</strong><br>(Mitra TMD/MMD)</p>
-                        <p class="mb-2"><strong>Bpk. Samsuri/Oray</strong><br>(Dirut PT. TMD)</p>
-                        <p class="mb-2"><strong>Bpk. Ato Suprianto/JOKER</strong><br>(Kakak)</p>
-                        <p class="mb-2"><strong>Bpk. Karman</strong><br>(Saudara)</p>
-                        <p class="mb-2"><strong>Bpk. Targa</strong><br>(Kakak)</p>
-                        <p class="mb-2"><strong>Bpk. Waslam</strong><br>(Kakak)</p>
-                        <p class="mb-2"><strong>Bpk. Asep/Bonang</strong><br>(Kakak)</p>
-                    </div>
-                 </div>
-                 <div class="page-number">5</div>
-            </div>
-
-            <!-- Halaman 6: Peta -->
-            <div class="page" style="padding: 0;">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d991.185244585145!2d105.7763428283681!3d-6.522499667794269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNsKwMzEnMjEuMCJTIDEwNcKwNDYnMzYuOSJF!5e0!3m2!1sid!2sid!4v1715854655577!5m2!1sid!2sid" 
-                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                <div class="page-number">6</div>
-            </div>
-
-            <!-- Halaman 7: Panduan Peta -->
-            <div class="page">
-                <div class="w-full">
-                    <h3 class="text-xl font-bold text-teal-800 mb-4 text-center">Panduan Menuju Lokasi</h3>
-                    <div class="space-y-3 text-stone-600 text-sm">
-                        <div class="flex items-start gap-3 p-3 bg-teal-50 rounded-lg"><div class="flex-shrink-0 w-6 h-6 bg-teal-200 text-teal-800 rounded-full flex items-center justify-center font-bold text-xs">1</div><p>Klik tombol <strong>"Buka di Google Maps"</strong> di bawah.</p></div>
-                        <div class="flex items-start gap-3 p-3 bg-teal-50 rounded-lg"><div class="flex-shrink-0 w-6 h-6 bg-teal-200 text-teal-800 rounded-full flex items-center justify-center font-bold text-xs">2</div><p>Setelah aplikasi terbuka, klik <strong>"Rute"</strong> atau <strong>"Directions"</strong>.</p></div>
-                        <div class="flex items-start gap-3 p-3 bg-teal-50 rounded-lg"><div class="flex-shrink-0 w-6 h-6 bg-teal-200 text-teal-800 rounded-full flex items-center justify-center font-bold text-xs">3</div><p>Ikuti panduan dari Google Maps untuk sampai ke tujuan.</p></div>
-                    </div>
-                    <a href="https://maps.app.goo.gl/g2B9VJrE37nMh7WG7" target="_blank" class="mt-6 w-full inline-block bg-teal-700 hover:bg-teal-800 text-white font-bold py-3 px-4 rounded-full shadow-lg text-center">Buka di Google Maps</a>
-                </div>
-                 <div class="page-number">7</div>
-            </div>
-
-            <!-- Halaman 8 & 9: Galeri -->
-            <div class="page"><div class="w-full text-center"><h2 class="text-3xl font-bold text-teal-800 mb-4">Galeri Kenangan</h2><div class="grid grid-cols-2 gap-2"><img src="./images/galeri-1.jpg" alt="Galeri 1" class="gallery-item rounded-lg shadow-md cursor-pointer w-full h-full object-cover"><img src="./images/galeri-2.jpg" alt="Galeri 2" class="gallery-item rounded-lg shadow-md cursor-pointer w-full h-full object-cover"><img src="./images/galeri-3.jpg" alt="Galeri 3" class="gallery-item rounded-lg shadow-md cursor-pointer w-full h-full object-cover"><img src="./images/galeri-4.jpg" alt="Galeri 4" class="gallery-item rounded-lg shadow-md cursor-pointer w-full h-full object-cover"></div></div><div class="page-number">8</div></div>
-            <div class="page"><div class="w-full text-center"><div class="grid grid-cols-2 gap-2"><img src="./images/galeri-5.jpg" alt="Galeri 5" class="gallery-item rounded-lg shadow-md cursor-pointer w-full h-full object-cover"><img src="./images/galeri-6.jpg" alt="Galeri 6" class="gallery-item rounded-lg shadow-md cursor-pointer w-full h-full object-cover"><img src="./images/galeri-7.jpg" alt="Galeri 7" class="gallery-item rounded-lg shadow-md cursor-pointer w-full h-full object-cover"><img src="./images/galeri-8.jpg" alt="Galeri 8" class="gallery-item rounded-lg shadow-md cursor-pointer w-full h-full object-cover"></div></div><div class="page-number">9</div></div>
-            
-            <!-- Halaman 10: Gemini -->
-            <div class="page"><div class="w-full text-center"><h2 class="text-3xl font-bold text-teal-800 mb-2">Kirim Do'a Spesial</h2><p class="text-stone-600 mb-4 text-sm">Klik tombol di bawah untuk meminta ✨ Gemini membuatkan doa yang indah untuk Harvi.</p><button id="generate-doa-btn" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full shadow-lg text-sm"><i data-lucide="sparkles" class="w-4 h-4"></i> Buatkan Do'a</button><div id="doa-result-container" class="mt-4 min-h-[150px] bg-teal-50 p-4 rounded-lg shadow-inner text-left relative hidden"><div id="loading-spinner" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 rounded-lg hidden"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-700"></div></div><blockquote id="doa-text" class="text-sm text-stone-700 italic"></blockquote><button id="copy-doa-btn" title="Salin Do'a" class="hidden absolute top-2 right-2 bg-white text-teal-700 p-1 rounded-full"><i data-lucide="copy" class="w-4 h-4"></i></button><span id="copy-feedback" class="absolute top-2 right-10 text-xs text-teal-600 opacity-0">Tersalin!</span></div></div><div class="page-number">10</div></div>
-            
-            <!-- Halaman 11: Countdown -->
-            <div class="page"><div class="w-full text-center"><h3 class="text-2xl font-bold text-teal-800 mb-6">Menuju Acara</h3><div id="countdown" class="grid grid-cols-2 gap-3 max-w-xs mx-auto"><div class="bg-teal-50 p-2 rounded-lg shadow-md"><div id="days" class="text-3xl font-bold text-teal-700">00</div><div class="text-xs text-teal-600">Hari</div></div><div class="bg-teal-50 p-2 rounded-lg shadow-md"><div id="hours" class="text-3xl font-bold text-teal-700">00</div><div class="text-xs text-teal-600">Jam</div></div><div class="bg-teal-50 p-2 rounded-lg shadow-md"><div id="minutes" class="text-3xl font-bold text-teal-700">00</div><div class="text-xs text-teal-600">Menit</div></div><div class="bg-teal-50 p-2 rounded-lg shadow-md"><div id="seconds" class="text-3xl font-bold text-teal-700">00</div><div class="text-xs text-teal-600">Detik</div></div></div></div><div class="page-number">11</div></div>
-            
-            <!-- Halaman 12: Penutup -->
-            <div class="page"><div class="w-full text-center"><p class="text-stone-600 mb-6">Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan do'a restu kepada putra kami.</p><h2 class="font-great-vibes text-5xl text-teal-800">Terima Kasih</h2><p class="mt-4 text-stone-500 text-sm">Wassalamu'alaikum Warahmatullahi Wabarakatuh.</p><p class="mt-8 text-lg">Kami yang berbahagia,</p><p class="font-bold text-xl text-teal-900">Keluarga Bapak Kunedi & Ibu Tinah</p></div><div class="page-number">12</div></div>
-            
-            <!-- Halaman 13: RSVP -->
-            <div class="page"><div class="w-full text-center"><h3 class="text-2xl font-bold text-teal-800 mb-4">Konfirmasi Kehadiran</h3><p class="text-stone-600 mb-6">Mohon konfirmasi kehadiran Anda melalui tombol di bawah ini.</p><a href="https://wa.me/6285659550376?text=Assalamualaikum.%20Saya%20ingin%20mengkonfirmasi%20kehadiran%20untuk%20acara%20khitanan%20Harvi.%20Nama%3A%20[Nama%20Anda],%20Jumlah%20yang%20hadir%3A%20[Jumlah%20Orang]" target="_blank" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg"><i data-lucide="send"></i> RSVP via WhatsApp</a></div><div class="page-number">13</div></div>
-
-            <!-- Halaman 14: Cover Belakang -->
-            <div class="page page-cover-back" data-density="hard">
-                <div class="text-center text-white">
-                     <img src="./images/profil-creator.jpg" alt="Creator Profile" class="w-20 h-20 rounded-full mx-auto mb-4 border-2 border-white shadow-lg">
-                     <p class="text-xs">Invitation created by</p><h3 class="text-xl font-bold mt-1">AnxGito Abimanyu</h3><p class="text-xs mt-4 mb-3">Hubungi saya:</p>
-                     <div class="flex justify-center items-center gap-4">
-                        <a href="https://www.facebook.com/anxgitoabimanyu" target="_blank" class="hover:opacity-75" title="Facebook"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"></path></svg></a>
-                        <a href="https://www.tiktok.com/@machiavellianism_404" target="_blank" class="hover:opacity-75" title="TikTok"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-2.43.05-4.84-.95-6.43-2.8-1.59-1.87-2.21-4.36-1.8-6.73.38-2.36 1.71-4.48 3.48-5.96 2.01-1.66 4.48-2.33 6.96-1.92.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"></path></svg></a>
-                        <a href="mailto:anxgitoabimanyu375@gmail.com" target="_blank" class="hover:opacity-75" title="Email"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"></path></svg></a>
-                        <a href="https://wa.me/6285711118797?text=Halo%2C%20saya%20tertarik%20untuk%20membuat%20undangan%20digital." target="_blank" class="hover:opacity-75" title="WhatsApp"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zM12.04 20.12c-1.48 0-2.93-.4-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.19 8.19 0 01-1.26-4.35c0-4.54 3.68-8.22 8.22-8.22s8.22 3.68 8.22 8.22-3.69 8.22-8.22 8.22zm4.52-6.14c-.25-.12-1.47-.72-1.7-.82s-.39-.12-.56.12c-.17.25-.64.82-.79.98s-.29.17-.54.06c-.25-.12-1.07-.39-2.04-1.26s-1.46-1.56-1.63-1.81c-.17-.25-.02-.38.11-.51.11-.11.25-.29.37-.43s.17-.21.25-.33c.08-.12.04-.25-.02-.37s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.42h-.48c-.17 0-.43.06-.66.31s-.87.85-.87 2.07c0 1.22.89 2.4 1.01 2.56s1.75 2.67 4.24 3.76c.59.26 1.05.41 1.41.52.59.17 1.13.15 1.55.09.47-.06 1.47-.6 1.68-1.18s.21-1.07.15-1.18c-.07-.1-.22-.16-.47-.28z"></path></svg></a>
-                    </div>
-                </div>
-            </div>
+            <!-- Tombol Versi Buku -->
+            <a id="link-buku" href="./versi-buku/" class="group flex-1 inline-flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-600 font-bold py-3 px-6 rounded-full transition-all shadow-lg transform hover:scale-105">
+                <i data-lucide="book-open" class="w-5 h-5 transition-transform group-hover:rotate-[5deg]"></i>
+                <span>Versi Interaktif (Buku)</span>
+            </a>
         </div>
         
-        <button id="prev-btn" class="nav-btn"><i data-lucide="arrow-left"></i></button>
-        <button id="next-btn" class="nav-btn"><i data-lucide="arrow-right"></i></button>
+        <p class="text-xs mt-12 text-gray-300">&copy; 2025 - Keluarga Bapak Kunedi & Ibu Tinah</p>
     </div>
-    
-    <div id="gallery-modal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[9000] hidden">
-        <img id="modal-img" src="" alt="Gambar Diperbesar" class="max-w-full max-h-full rounded-lg">
-        <button id="close-modal" class="absolute top-4 right-4 text-white text-4xl">&times;</button>
-    </div>
-    
+
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            lucide.createIcons();
-            const openButton = document.getElementById('open-invitation');
-            const music = document.getElementById('background-music');
-            let autoFlipInterval;
+        lucide.createIcons();
 
-            openButton.addEventListener('click', () => {
-                const openerOverlay = document.getElementById('opener-overlay');
-                const musicToggle = document.getElementById('music-toggle');
-                const bookContainer = document.getElementById('book-container');
+        // Ambil parameter 'to' dari URL lobi
+        const urlParams = new URLSearchParams(window.location.search);
+        const guest = urlParams.get('to');
 
-                openerOverlay.style.opacity = '0';
-                setTimeout(() => openerOverlay.style.display = 'none', 750);
-                
-                bookContainer.classList.remove('hidden');
-                musicToggle.classList.remove('hidden');
-                document.body.classList.remove('overflow-hidden');
-                
-                const playPromise = music.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => updateMusicButton(true))
-                               .catch(error => {
-                                    console.error("Audio play was prevented:", error);
-                                    updateMusicButton(false);
-                                });
-                }
-                
-                const book = document.getElementById('book');
-                const bookWidth = Math.min(window.innerWidth * 0.9, 500);
-                const bookHeight = bookWidth * 1.4;
+        if (guest) {
+            // Jika ada nama tamu, tambahkan ke link tombol
+            const linkGulir = document.getElementById('link-gulir');
+            const linkBuku = document.getElementById('link-buku');
 
-                const pageFlip = new St.PageFlip(book, { width: bookWidth, height: bookHeight, showCover: true });
-                pageFlip.loadFromHTML(document.querySelectorAll('.page'));
-
-                const stopAutoFlip = () => {
-                    if (autoFlipInterval) {
-                        clearInterval(autoFlipInterval);
-                        autoFlipInterval = null;
-                    }
-                };
-
-                autoFlipInterval = setInterval(() => {
-                    if (pageFlip.getCurrentPageIndex() < pageFlip.getPageCount() - 1) {
-                        pageFlip.flipNext();
-                    } else {
-                        stopAutoFlip();
-                    }
-                }, 7000);
-
-                book.addEventListener('mousedown', stopAutoFlip, { once: true });
-                book.addEventListener('touchstart', stopAutoFlip, { once: true });
-                document.getElementById('prev-btn').addEventListener('click', () => {
-                    stopAutoFlip();
-                    pageFlip.flipPrev();
-                });
-                document.getElementById('next-btn').addEventListener('click', () => {
-                    stopAutoFlip();
-                    pageFlip.flipNext();
-                });
-                
-                const prevBtn = document.getElementById('prev-btn');
-                const nextBtn = document.getElementById('next-btn');
-                const updateNavButtons = () => {
-                    const currentPage = pageFlip.getCurrentPageIndex();
-                    const pageCount = pageFlip.getPageCount();
-                    prevBtn.style.display = (currentPage > 0) ? 'flex' : 'none';
-                    nextBtn.style.display = (currentPage < pageCount - 1) ? 'flex' : 'none';
-                };
-                pageFlip.on('flip', updateNavButtons);
-                updateNavButtons();
-            });
-            
-            const musicToggle = document.getElementById('music-toggle');
-            const updateMusicButton = (isPlaying) => {
-                const musicIcon = document.getElementById('music-icon');
-                musicToggle.classList.toggle('playing', isPlaying);
-                musicIcon.setAttribute('data-lucide', isPlaying ? 'pause-circle' : 'play-circle');
-                lucide.createIcons();
-            };
-            musicToggle.addEventListener('click', () => {
-                if (music.paused) {
-                    music.play();
-                    updateMusicButton(true);
-                } else {
-                    music.pause();
-                    updateMusicButton(false);
-                }
-            });
-
-            // Logika Countdown
-            const countdownDate = new Date("2025-09-22T08:00:00").getTime();
-            const countdownFunction = setInterval(() => {
-                const now = new Date().getTime();
-                const distance = countdownDate - now;
-                if (distance < 0) {
-                    clearInterval(countdownFunction);
-                    const countdownElement = document.getElementById("countdown");
-                    if (countdownElement) {
-                        countdownElement.innerHTML = "<div class='col-span-2 md:col-span-4 text-center text-xl font-bold text-teal-800'>Acara Telah Berlangsung</div>";
-                    }
-                    return;
-                }
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                document.getElementById("days").innerText = days.toString().padStart(2, '0');
-                document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
-                document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
-                document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
-            }, 1000);
-
-            // Logika Galeri Modal
-            const galleryItems = document.querySelectorAll('.gallery-item');
-            const modal = document.getElementById('gallery-modal');
-            const modalImg = document.getElementById('modal-img');
-            const closeModalBtn = document.getElementById('close-modal');
-            galleryItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    modal.classList.remove('hidden');
-                    modalImg.src = item.src;
-                });
-            });
-            const hideModal = () => modal.classList.add('hidden');
-            closeModalBtn.addEventListener('click', hideModal);
-            modal.addEventListener('click', (e) => {
-                if(e.target === modal) hideModal();
-            });
-            
-            // Logika Gemini
-            const generateDoaBtn = document.getElementById('generate-doa-btn');
-            const doaResultContainer = document.getElementById('doa-result-container');
-            const loadingSpinner = document.getElementById('loading-spinner');
-            const doaText = document.getElementById('doa-text');
-            const copyDoaBtn = document.getElementById('copy-doa-btn');
-            const copyFeedback = document.getElementById('copy-feedback');
-            generateDoaBtn.addEventListener('click', async () => {
-                doaResultContainer.classList.remove('hidden');
-                loadingSpinner.classList.remove('hidden');
-                doaText.textContent = '';
-                copyDoaBtn.classList.add('hidden');
-                const apiKey = "";
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-                const userPrompt = `Buatkan sebuah doa yang indah dan menyentuh dalam bahasa Indonesia untuk seorang anak laki-laki bernama Harvi yang baru saja dikhitan. Doa ini harus singkat (sekitar 2-3 kalimat), berisi harapan untuk kesehatan, kesalehan, keberanian, dan masa depan yang cerah. Gunakan bahasa yang sopan dan penuh harapan. Jangan gunakan format markdown.`;
-                const payload = { contents: [{ parts: [{ text: userPrompt }] }], generationConfig: { temperature: 0.8, topK: 40, topP: 0.95, maxOutputTokens: 1024 } };
-                try {
-                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                    const result = await response.json();
-                    let generatedText = "Maaf, terjadi kesalahan saat membuat do'a. Silakan coba lagi.";
-                    const textFromResult = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-                    if (textFromResult) generatedText = textFromResult;
-                    doaText.textContent = generatedText;
-                    copyDoaBtn.classList.remove('hidden');
-                } catch (error) {
-                    console.error("Error calling Gemini API:", error);
-                    doaText.textContent = "Maaf, tidak dapat terhubung ke layanan. Periksa koneksi internet Anda dan coba lagi.";
-                } finally {
-                    loadingSpinner.classList.add('hidden');
-                    lucide.createIcons();
-                }
-            });
-            copyDoaBtn.addEventListener('click', () => {
-                const textarea = document.createElement('textarea');
-                textarea.value = doaText.textContent;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                copyFeedback.classList.remove('opacity-0');
-                setTimeout(() => copyFeedback.classList.add('opacity-0'), 2000);
-            });
-
-             // Logika untuk menampilkan nama tamu dari URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const guest = urlParams.get('to');
-            if (guest) {
-                const guestName = guest.replace(/_/g, ' ');
-                document.getElementById('guest-name').textContent = guestName;
-                document.getElementById('guest-name-opener').textContent = guestName;
-            }
-        });
+            linkGulir.href = `./versi-gulir/?to=${guest}`;
+            linkBuku.href = `./versi-buku/?to=${guest}`;
+        }
     </script>
 </body>
 </html>
