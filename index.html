@@ -41,13 +41,13 @@
 
         <div class="flex flex-col md:flex-row gap-4 justify-center">
             <!-- Tombol Versi Gulir -->
-            <a href="./versi-gulir/" class="group flex-1 inline-flex items-center justify-center gap-2 bg-teal-700 hover:bg-teal-600 font-bold py-3 px-6 rounded-full transition-all shadow-lg transform hover:scale-105">
+            <a id="link-gulir" href="./versi-gulir/" class="group flex-1 inline-flex items-center justify-center gap-2 bg-teal-700 hover:bg-teal-600 font-bold py-3 px-6 rounded-full transition-all shadow-lg transform hover:scale-105">
                 <i data-lucide="smartphone" class="w-5 h-5 transition-transform group-hover:rotate-[-10deg]"></i>
                 <span>Versi Klasik (Gulir)</span>
             </a>
 
             <!-- Tombol Versi Buku -->
-            <a href="./versi-buku/" class="group flex-1 inline-flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-600 font-bold py-3 px-6 rounded-full transition-all shadow-lg transform hover:scale-105">
+            <a id="link-buku" href="./versi-buku/" class="group flex-1 inline-flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-600 font-bold py-3 px-6 rounded-full transition-all shadow-lg transform hover:scale-105">
                 <i data-lucide="book-open" class="w-5 h-5 transition-transform group-hover:rotate-[5deg]"></i>
                 <span>Versi Interaktif (Buku)</span>
             </a>
@@ -60,6 +60,19 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <script>
         lucide.createIcons();
+
+        // Ambil parameter 'to' dari URL lobi
+        const urlParams = new URLSearchParams(window.location.search);
+        const guest = urlParams.get('to');
+
+        if (guest) {
+            // Jika ada nama tamu, tambahkan ke link tombol
+            const linkGulir = document.getElementById('link-gulir');
+            const linkBuku = document.getElementById('link-buku');
+
+            linkGulir.href = `./versi-gulir/?to=${guest}`;
+            linkBuku.href = `./versi-buku/?to=${guest}`;
+        }
     </script>
 </body>
 </html>
