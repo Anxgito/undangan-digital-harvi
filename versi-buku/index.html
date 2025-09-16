@@ -91,10 +91,10 @@
                         <img src="./images/harvi.jpg" alt="Harvi" class="w-full h-full object-cover">
                     </div>
                     <div class="space-y-4 text-left mx-auto max-w-xs">
-                        <h3 class="text-xl font-bold text-teal-800 text-center border-b-2 border-teal-200 pb-2">Insya Allah:</h3>
-                        <div class="flex items-start space-x-3"><i data-lucide="calendar-days" class="w-6 h-6 text-teal-700 mt-1"></i><div><h4 class="font-bold">Hari & Tanggal</h4><p class="text-stone-600">Senin, 22 September 2025</p></div></div>
-                        <div class="flex items-start space-x-3"><i data-lucide="clock" class="w-6 h-6 text-teal-700 mt-1"></i><div><h4 class="font-bold">Waktu</h4><p class="text-stone-600">08:00 WIB s/d Selesai</p></div></div>
-                        <div class="flex items-start space-x-3"><i data-lucide="map-pin" class="w-6 h-6 text-teal-700 mt-1"></i><div><h4 class="font-bold">Lokasi</h4><p class="text-stone-600 text-sm">Kp. Kebon Kelapa RT 005/003, Desa Mekarsari, Panimbang</p></div></div>
+                        <h3 class="text-xs font-bold text-teal-800 text-center border-b-2 border-teal-200 pb-2">Insya Allah diselenggarakan pada Hari:</h3>
+                        <div class="flex items-start space-x-3"><i data-lucide="calendar-days" class="w-6 h-6 text-teal-700 mt-1"></i><div><h4 class="font-bold text-sm">Hari & Tanggal</h4><p class="text-stone-600 text-sm">Senin, 22 September 2025</p></div></div>
+                        <div class="flex items-start space-x-3"><i data-lucide="clock" class="w-6 h-6 text-teal-700 mt-1"></i><div><h4 class="font-bold text-sm">Waktu</h4><p class="text-stone-600 text-sm">08:00 WIB s/d Selesai</p></div></div>
+                        <div class="flex items-start space-x-3"><i data-lucide="map-pin" class="w-6 h-6 text-teal-700 mt-1"></i><div><h4 class="font-bold text-sm">Lokasi</h4><p class="text-stone-600 text-sm">Kp. Kebon Kelapa RT 005/003, Desa Mekarsari, Panimbang</p></div></div>
                     </div>
                 </div>
                 <div class="page-number">3</div>
@@ -346,7 +346,7 @@
                 copyDoaBtn.classList.add('hidden');
                 const apiKey = "";
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-                const userPrompt = `Buatkan sebuah doa yang indah dan menyentuh dalam bahasa Indonesia untuk seorang anak laki-laki bernama Harvi yang baru saja dikhitan. Doa ini harus singkat (sekitar 2-3 kalimat), berisi harapan untuk kesehatan, kesalehan, keberanian, dan masa depan yang cerah. Gunakan bahasa yang sopan dan penuh harapan. Jangan gunakan format markdown.`;
+                const userPrompt = `Buatkan sebuah doa yang indah dan menyentuh dalam bahasa Indonesia untuk seorang anak laki-laki bernama Harvi Tegar Sevtian yang baru saja dikhitan. Doa ini harus singkat (sekitar 2-3 kalimat), berisi harapan untuk kesehatan, kesalehan, keberanian, dan masa depan yang cerah. Gunakan bahasa yang sopan dan penuh harapan. Jangan gunakan format markdown.`;
                 const payload = { contents: [{ parts: [{ text: userPrompt }] }], generationConfig: { temperature: 0.8, topK: 40, topP: 0.95, maxOutputTokens: 1024 } };
                 try {
                     const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
