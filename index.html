@@ -1,79 +1,33 @@
-<!DOCTYPE html>
-<html lang="id">
+<!doctype html>
+<html lang=id>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Undangan Walimatul Khitan | Harvi Tegar Seftian</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-image: url('./versi-buku/images/cover.jpg'); /* Mengambil gambar dari folder versi buku */
-            background-size: cover;
-            background-position: center;
-        }
-        .font-great-vibes {
-            font-family: 'Great Vibes', cursive;
-        }
-        .glass-card {
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-    </style>
+<meta charset=UTF-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Undangan Walimatul Khitan | Harvi Tegar Seftian</title>
+<script src=https://cdn.tailwindcss.com></script>
+<link rel=preconnect href=https://fonts.googleapis.com>
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;500;700&display=swap" rel=stylesheet>
+<style>body{font-family:Montserrat,sans-serif;background-image:url('./versi-buku/images/cover.jpg');background-size:cover;background-position:center}.font-great-vibes{font-family:'Great Vibes',cursive}.glass-card{background:rgba(0,0,0,.4);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2)}</style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
-
-    <div class="w-full max-w-lg text-center text-white rounded-2xl shadow-2xl p-8 md:p-12 glass-card">
-        <h2 class="text-2xl md:text-3xl tracking-wider">Undangan Tasyakuran Khitan</h2>
-        <h1 class="font-great-vibes text-6xl md:text-8xl my-4">Harvi Tegar Seftian</h1>
-        
-        <p class="mt-8 mb-6">Silakan pilih versi undangan yang ingin Anda lihat:</p>
-
-        <div class="flex flex-col md:flex-row gap-4 justify-center">
-            <!-- Tombol Versi Gulir -->
-            <a id="link-gulir" href="./versi-gulir/" class="group flex-1 inline-flex items-center justify-center gap-2 bg-teal-700 hover:bg-teal-600 font-bold py-3 px-6 rounded-full transition-all shadow-lg transform hover:scale-105">
-                <i data-lucide="smartphone" class="w-5 h-5 transition-transform group-hover:rotate-[-10deg]"></i>
-                <span>Versi Klasik (Gulir)</span>
-            </a>
-
-            <!-- Tombol Versi Buku -->
-            <a id="link-buku" href="./versi-buku/" class="group flex-1 inline-flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-600 font-bold py-3 px-6 rounded-full transition-all shadow-lg transform hover:scale-105">
-                <i data-lucide="book-open" class="w-5 h-5 transition-transform group-hover:rotate-[5deg]"></i>
-                <span>Versi Interaktif (Buku)</span>
-            </a>
-        </div>
-        
-        <p class="text-xs mt-12 text-gray-300">&copy; 2025 - Keluarga Bapak Kunedi & Ibu Tinah</p>
-    </div>
-
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <script>
-        lucide.createIcons();
-
-        // Ambil parameter 'to' dari URL lobi
-        const urlParams = new URLSearchParams(window.location.search);
-        const guest = urlParams.get('to');
-
-        if (guest) {
-            // Jika ada nama tamu, tambahkan ke link tombol
-            const linkGulir = document.getElementById('link-gulir');
-            const linkBuku = document.getElementById('link-buku');
-
-            linkGulir.href = `./versi-gulir/?to=${guest}`;
-            linkBuku.href = `./versi-buku/?to=${guest}`;
-        }
-    </script>
+<div class="w-full max-w-lg text-center text-white rounded-2xl shadow-2xl p-8 md:p-12 glass-card">
+<h2 class="text-2xl md:text-3xl tracking-wider">Undangan Tasyakuran Khitan</h2>
+<h1 class="font-great-vibes text-6xl md:text-8xl my-4">Harvi Tegar Seftian</h1>
+<p class="mt-8 mb-6">Silakan pilih versi undangan yang ingin Anda lihat:</p>
+<div class="flex flex-col md:flex-row gap-4 justify-center">
+<a id=link-gulir href=./versi-gulir/ class="group flex-1 inline-flex items-center justify-center gap-2 bg-teal-700 hover:bg-teal-600 font-bold py-3 px-6 rounded-full transition-all shadow-lg transform hover:scale-105">
+<i data-lucide=smartphone class="w-5 h-5 transition-transform group-hover:rotate-[-10deg]"></i>
+<span>Versi Klasik (Gulir)</span>
+</a>
+<a id=link-buku href=./versi-buku/ class="group flex-1 inline-flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-600 font-bold py-3 px-6 rounded-full transition-all shadow-lg transform hover:scale-105">
+<i data-lucide=book-open class="w-5 h-5 transition-transform group-hover:rotate-[5deg]"></i>
+<span>Versi Interaktif (Buku)</span>
+</a>
+</div>
+<p class="text-xs mt-12 text-gray-300">&copy; 2025 - Keluarga Bapak Kunedi & Ibu Tinah</p>
+</div>
+<script src=https://unpkg.com/lucide@latest/dist/umd/lucide.js></script>
+<script>lucide.createIcons();const urlParams=new URLSearchParams(window.location.search),guest=urlParams.get("to");if(guest){const e=document.getElementById("link-gulir"),t=document.getElementById("link-buku");e.href=`./versi-gulir/?to=${guest}`,t.href=`./versi-buku/?to=${guest}`}</script>
 </body>
 </html>
-
